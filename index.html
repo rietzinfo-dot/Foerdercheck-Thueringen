@@ -1,0 +1,925 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Förder-Check Thüringen</title>
+<meta name="description" content="Wie viel Zeit und Geld spart dein Betrieb mit KI-Tools? Mit Förderung aus InnoInvest der Thüringer Aufbaubank und kostenloser Antragstellung.">
+<meta property="og:title" content="Förder-Check Thüringen">
+<meta property="og:description" content="Kosten- und Zeitersparnis mit KI-Tools berechnen. InnoInvest Thüringen, laufend beantragbar.">
+<style>
+@font-face{font-family:'Bricolage Grotesque';font-style:normal;font-weight:200 800;font-display:swap;src:url(BricolageGrotesque.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'Source Sans 3';font-style:normal;font-weight:200 900;font-display:swap;src:url(SourceSans3.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:'IBM Plex Mono';font-style:normal;font-weight:500;font-display:swap;src:url(IBMPlexMono-500.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<style>
+/* Layout: Kopfleiste, Fenster-Banner (Text links, Timer rechts), darunter 7:5-Raster –
+   links Schritt 1+2 (Eingaben), rechts klebend Schritt 3 mit Ergebnis. Am Handy alles untereinander.
+   Bewusst nur helles Design (Marcos Vorgabe). */
+:root{
+  --papier:#f3f6f5; --karte:#ffffff; --feld:#f7faf9; --tinte:#10302f; --tinte-2:#4a615f; --linie:#d6e0de;
+  --petrol:#0f6b67; --petrol-hell:#d9efed; --gold:#f2b705; --gold-hell:#fff6d6; --gold-rand:#efd77a;
+  --gut:#1d7a3e; --gut-hell:#e2f3e7; --warn:#a15c00; --warn-hell:#fff1dc; --schlecht:#a8302a; --schlecht-hell:#fbe4e2;
+  --f-titel:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-text:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --f-zahl:"IBM Plex Mono", ui-monospace, "Cascadia Mono", monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{background:var(--papier);color:var(--tinte);font:16px/1.5 var(--f-text);margin:0}
+.innen{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3,h4{font-family:var(--f-titel);text-wrap:balance;margin:0;line-height:1.15}
+.zahl{font-family:var(--f-zahl);font-variant-numeric:tabular-nums}
+p{margin:0}
+
+/* Kopfleiste */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:41;background:var(--karte)}
+.leiste{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:rgba(255,255,255,.94);border-bottom:1px solid var(--linie);backdrop-filter:blur(8px)}
+.leiste .innen{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding-block:12px}
+.marke{display:flex;align-items:center;gap:12px}
+.marke-icon{width:44px;height:44px;border-radius:12px;background:var(--petrol-hell);border:1px solid #b5ddd9;display:grid;place-items:center;color:var(--petrol)}
+.kicker{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--petrol);font-weight:700}
+.marke h1{font-size:clamp(19px,2.4vw,24px);font-weight:800}
+.knopf{display:inline-flex;align-items:center;gap:8px;font:700 15px var(--f-text);background:var(--petrol);color:#fff;border:0;border-radius:10px;padding:10px 16px;cursor:pointer;text-decoration:none}
+.knopf:hover{background:#0c5754}
+.knopf:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+main{padding-block:28px 0;display:grid;gap:28px}
+main.innen{max-width:1000px}
+
+/* Banner */
+.banner{background:linear-gradient(110deg,var(--karte) 0%,var(--gold-hell) 100%);border:1px solid var(--gold-rand);border-radius:18px;padding:32px 28px;display:grid;grid-template-columns:minmax(0,1fr);gap:36px}
+.banner-text{display:grid;gap:22px;min-width:0;width:100%;text-align:left}
+.banner .titel.umbruch .programm{margin-top:14px}
+.banner .text{line-height:1.65}
+@media (max-width:600px){.banner{padding:22px 18px;gap:26px}.banner-text{gap:16px}.banner .titel.umbruch .programm{margin-top:8px}}
+.banner .titel{white-space:nowrap;line-height:1.2}
+.banner .titel span{white-space:nowrap}
+.banner .titel .programm{font-weight:600}
+.banner .titel.umbruch span{display:block;width:max-content}
+.banner .titel.umbruch .programm{margin-top:6px}
+.banner .text{text-align:justify;hyphens:auto;-webkit-hyphens:auto}
+.eilig{justify-self:start;display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--warn);background:var(--warn-hell);border:1px solid #f0c98a;border-radius:999px;padding:4px 12px}
+.eilig svg{width:14px;height:14px}
+@media (prefers-reduced-motion:no-preference){.eilig svg{animation:puls 1.6s ease-in-out infinite}}
+@keyframes puls{50%{opacity:.35}}
+.banner .titel{font-size:clamp(24px,3.4vw,34px);font-weight:800}
+.banner .programm{font-family:var(--f-titel);font-weight:600}
+.banner .programm em{font-style:normal;background:linear-gradient(transparent 62%,var(--gold) 62%)}
+.banner .text{color:var(--tinte-2);font-size:17px}
+.banner .text b{color:var(--tinte)}
+.banner .text u{text-decoration-color:var(--gold);text-decoration-thickness:3px;text-underline-offset:3px;font-weight:700;color:var(--tinte)}
+.frist{background:var(--tinte);color:#fff;border:3px solid var(--gold);border-radius:14px;padding:16px;text-align:center;width:100%}
+.frist small{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#cdeeea;font-weight:700}
+.uhr{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0 8px}
+.uhr div{background:var(--gold);color:var(--tinte);border-radius:10px;padding:8px 0 5px}
+.uhr b{font-family:var(--f-zahl);font-variant-numeric:tabular-nums;font-size:clamp(24px,3vw,32px);font-weight:500;display:block;line-height:1.1}
+.uhr i{font-style:normal;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#5c4600;font-weight:700}
+.frist span{font-size:13px;color:#e3f4f2}
+
+/* Raster */
+.spalte{display:grid;gap:28px;min-width:0}
+.karte{background:var(--karte);border:1px solid var(--linie);border-radius:18px;padding:22px;display:grid;gap:20px;box-shadow:0 2px 10px rgba(16,48,47,.05)}
+.karte[data-box="projekt"]{background:linear-gradient(110deg,var(--karte) 0%,var(--gold-hell) 100%);border-color:var(--gold-rand)}
+.karte[data-box="projekt"] .k-kopf{border-bottom-color:var(--gold-rand)}
+.k-kopf{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--linie);padding-bottom:16px}
+.k-titel{display:flex;align-items:center;gap:12px}
+.nr{width:34px;height:34px;border-radius:50%;background:var(--petrol);color:#fff;font:700 15px var(--f-zahl);display:grid;place-items:center;flex:none}
+.k-titel h3{font-size:19px}
+.k-titel p{font-size:13.5px;color:var(--tinte-2)}
+.gesamt{text-align:right}
+.gesamt small{display:block;font-size:12.5px;color:var(--tinte-2)}
+.gesamt b{font-family:var(--f-zahl);font-size:19px;font-weight:500;color:var(--gut)}
+
+/* Formular */
+.felder{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:520px){.felder{grid-template-columns:1fr}}
+label,.lbl{font-size:13.5px;font-weight:600;color:var(--tinte-2);display:grid;gap:6px}
+.lbl-zeile{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.lbl-zeile b{font-family:var(--f-zahl);color:var(--petrol);font-size:15px}
+select,input[type=number]{font:inherit;font-size:16px;padding:10px 12px;border:1px solid var(--linie);border-radius:10px;background:var(--feld);color:var(--tinte);width:100%}
+input[type=range]{width:100%;accent-color:var(--petrol)}
+.meldung{border-radius:12px;padding:12px 14px;font-size:14px;display:flex;gap:10px;align-items:flex-start}
+.meldung svg{width:18px;height:18px;flex:none;margin-top:2px}
+.meldung.gut{background:var(--gut-hell);color:var(--gut)} .meldung.blau{background:var(--petrol-hell);color:var(--petrol)}
+.meldung.schlecht{background:var(--schlecht-hell);color:var(--schlecht)}
+.meldung.gold{background:var(--gold);color:var(--tinte);border:3px solid var(--tinte)} .meldung.warn{background:var(--warn-hell);color:var(--warn)}
+.meldungen{display:grid;gap:8px}
+.meldungen:empty{display:none}
+
+/* Aufgaben */
+.aufgaben{display:grid;gap:12px}
+.aufgabe{border:1px solid var(--linie);border-radius:14px;padding:14px 16px;background:var(--karte)}
+.aufgabe.an{background:var(--petrol-hell);border-color:var(--petrol);box-shadow:inset 4px 0 0 var(--petrol)}
+.aufgabe.aus{background:var(--karte)}
+.aufgabe.aus:hover{border-color:var(--petrol);background:var(--feld)}
+.aufgabe.aus .a-links label::after{content:"+ auswählen";display:inline-block;margin-left:8px;font-size:12px;font-weight:700;color:var(--petrol);background:var(--petrol-hell);border-radius:6px;padding:1px 7px;white-space:nowrap}
+.a-kopf{display:flex;gap:12px;align-items:flex-start;justify-content:space-between}
+.a-links{display:flex;gap:10px;align-items:flex-start;min-width:0}
+.a-links input{width:18px;height:18px;margin-top:3px;accent-color:var(--petrol);flex:none;cursor:pointer}
+.a-links label{font-size:15px;font-weight:700;color:var(--tinte);cursor:pointer;display:block}
+.a-wie{font-size:13.5px;color:var(--tinte-2);margin-top:2px}
+.a-ref{display:inline-block;margin-top:6px;font-size:11.5px;font-weight:700;color:var(--petrol);background:var(--petrol-hell);border:1px solid #b5ddd9;border-radius:6px;padding:1px 8px}
+.a-rechts{text-align:right;flex:none}
+.a-rechts b{display:block;font-family:var(--f-zahl);font-size:14px;font-weight:500}
+.a-rechts span{font-size:12.5px;color:var(--gut);font-weight:700}
+.a-regler{margin-top:12px;padding-top:12px;border-top:1px solid var(--linie);display:grid;gap:8px}
+.a-werte{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;color:var(--tinte-2)}
+.a-werte b{color:var(--tinte)} .a-werte .g{font-weight:700;color:var(--tinte)} .a-werte .g b{color:var(--gut)}
+.balken{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;color:var(--tinte)}
+.balken b{display:block;height:24px;border-radius:6px;background:var(--gold);flex:none;min-width:6px;max-width:60%}
+.balken span{min-width:0}
+/* Handy: nichts darf breiter als der Bildschirm werden, auch bei großer Systemschrift */
+.spalte>*,.aufgaben>*,.aufgabe *,.felder>*,label,.lbl,.lbl *{min-width:0}
+select,input{max-width:100%;min-width:0}
+select{text-overflow:ellipsis}
+.a-werte{flex-wrap:wrap}
+@media (max-width:600px){
+  .a-kopf{flex-direction:column;align-items:stretch;gap:6px}
+  .a-rechts{text-align:left;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;padding-left:28px}
+  .a-werte{flex-direction:column;gap:2px}
+  .karte{padding:16px}
+  .aufgabe{padding:12px}
+  .balken span{font-size:12.5px}
+}
+.legende{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--tinte-2)}
+.legende span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px;background:var(--petrol)}
+.legende span.g::before{background:var(--gold)}
+@media (prefers-reduced-motion:no-preference){.balken i,.balken b{transition:all .25s ease}}
+
+/* Schritt 3 */
+.eckdaten{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;text-align:center}
+.eck{border:1px solid var(--linie);border-radius:12px;padding:10px 6px;background:var(--feld)}
+.eck b{font-family:var(--f-zahl);font-size:clamp(16px,1.8vw,19px);font-weight:500;display:block;color:var(--petrol)}
+.eck.gold{background:var(--gold-hell);border-color:var(--gold-rand)} .eck.gold b{color:var(--tinte)}
+.eck span{font-size:11.5px;color:var(--tinte-2);display:block;line-height:1.25;margin-top:2px}
+.kostenzeile{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.kostenzeile label{font-size:15px;color:var(--tinte)}
+.kostenzeile b{font-family:var(--f-zahl);font-size:20px;font-weight:500;color:var(--petrol)}
+.klein{font-size:12.5px;color:var(--tinte-2)}
+.aufstellung{background:var(--feld);border:1px solid var(--linie);border-radius:12px;padding:14px;display:grid;gap:8px;font-size:14px}
+.aufstellung div{display:flex;justify-content:space-between;gap:10px}
+.aufstellung span:last-child{font-family:var(--f-zahl);font-variant-numeric:tabular-nums;white-space:nowrap}
+.aufstellung .zuschuss{color:var(--petrol);font-weight:700}
+.aufstellung .summe{border-top:1px solid var(--linie);padding-top:8px;font-weight:700;font-size:15px}
+.teilung{display:flex;height:40px;border-radius:10px;overflow:hidden;border:1px solid var(--linie);font-weight:700;font-size:13px}
+.teilung div{display:flex;align-items:center;justify-content:center;white-space:nowrap;overflow:hidden;min-width:0;padding:0 6px}
+.teilung .land{background:var(--gold);color:var(--tinte)} .teilung .du{background:var(--petrol);color:#fff}
+.ergebnis{background:var(--tinte);color:#fff;border:3px solid var(--gold);border-radius:14px;padding:18px;display:grid;gap:14px}
+.ergebnis h4{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:#cdeeea;display:flex;align-items:center;gap:8px}
+.kacheln{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.kachel{background:var(--petrol);border-radius:10px;padding:12px 14px}
+.kachel small{font-size:12.5px;color:#d7efec;display:block}
+.kachel b{font-family:var(--f-zahl);font-size:clamp(19px,2vw,23px);font-weight:500;display:block}
+.kachel.gold{background:var(--gold);color:var(--tinte)}
+.kachel.gold small{color:#5c4600;font-weight:600}
+.verlauf{display:grid;gap:8px}
+.verlauf h4{font-size:15px}
+.kurven-legende{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--tinte-2)}
+.kurven-legende span::before{content:"";display:inline-block;width:18px;border-top:3px solid var(--petrol);margin-right:6px;vertical-align:3px}
+.kurven-legende span.ohne::before{border-top:3px dashed #9aaba9}
+.kurve-box{background:var(--feld);border:1px solid var(--linie);border-radius:12px;padding:6px}
+.kurve-box svg{width:100%;max-width:680px;height:auto;display:block;margin:0 auto}
+.satz{font-size:15.5px;text-align:center;background:var(--gold);color:var(--tinte);border:3px solid var(--tinte);border-radius:14px;padding:26px 28px;line-height:1.6}
+.satz .spar{display:block;font-family:var(--f-titel);font-size:28px;font-weight:800;margin-top:14px;white-space:nowrap}
+.satz .spar.umbruch,.satz .auch.umbruch{white-space:normal}
+.satz .auch{white-space:nowrap}
+.karte>*,.verlauf>*{min-width:0}
+.satz{overflow:hidden}
+.satz .amort{display:block;margin-top:14px;font-size:16px;font-weight:600}
+.satz .auch{display:block;margin-top:18px;padding-top:16px;border-top:1px solid rgba(16,48,47,.25);font-size:15px}
+@media (max-width:600px){.satz{padding:18px 16px}}
+.echt{background:var(--gold);color:var(--tinte);border-radius:10px;padding:12px 14px;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px}
+.echt small{font-size:16px;font-weight:700;font-family:var(--f-titel)}
+.echt b{font-family:var(--f-zahl);font-size:clamp(20px,2.4vw,26px);font-weight:500}
+.echt span{flex-basis:100%;font-size:12.5px}
+.vorteile{border-top:1px solid var(--linie);padding-top:16px;display:grid;gap:10px}
+.vorteile h4{font-size:15px}
+.vorteile ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:14px}
+.vorteile li{display:flex;gap:8px;align-items:flex-start;justify-content:center;text-align:center}
+.vorteile h4{text-align:center}
+.vorteile li svg{width:16px;height:16px;flex:none;margin-top:3px;color:var(--gut)}
+.kontakt{display:grid;gap:10px}
+.antragshilfe{background:var(--tinte);color:#fff;border:3px solid var(--gold);border-radius:14px;padding:20px 22px;display:grid;gap:10px;text-align:justify;hyphens:auto;-webkit-hyphens:auto}
+.ah-titel{font-family:var(--f-titel);font-weight:800;font-size:clamp(22px,3vw,30px);line-height:1.2;text-align-last:justify}
+.ah-text{font-size:clamp(16px,1.8vw,19px);font-weight:700;color:#e3f4f2}
+.kontakt .knopf,.leiste .knopf{background:var(--gold);color:var(--tinte);border:3px solid var(--tinte);font-weight:800}
+.kontakt .knopf:hover,.leiste .knopf:hover{background:#ffcb2e}
+.senden{background:var(--karte);border:3px solid var(--tinte);border-radius:14px;padding:18px;display:grid;gap:12px;text-align:center}
+.senden-titel{font-family:var(--f-titel);font-weight:800;font-size:19px}
+.senden-knoepfe{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:520px){.senden-knoepfe{grid-template-columns:1fr}}
+.kontakt .senden .knopf{border-width:2px}
+.kontakt .senden .knopf.wa{background:#25d366;color:#08311a}
+.kontakt .senden .knopf.wa:hover{background:#3ee07a}
+.kopierzeile{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 10px;font-size:14px}
+.kopierzeile button{font:700 12.5px var(--f-text);background:var(--petrol-hell);color:var(--petrol);border:1px solid #b5ddd9;border-radius:6px;padding:3px 9px;cursor:pointer}
+/* Über mich / Impressum */
+.infos{display:grid;gap:10px;margin-top:16px}
+.infos details{background:var(--feld);border:1px solid var(--linie);border-radius:12px;padding:12px 16px;font-size:14px;color:var(--tinte-2)}
+.infos summary{cursor:pointer;font-weight:700;color:var(--tinte);font-size:15px}
+.infos details[open] summary{margin-bottom:10px}
+.infos h4{font-size:15px;color:var(--tinte);margin:14px 0 4px}
+.infos p{margin:0 0 8px}
+.infos .ich{display:flex;gap:16px;align-items:flex-start}
+.infos .ich img{width:96px;height:96px;border-radius:50%;flex:none;object-fit:cover}
+@media (max-width:520px){.infos .ich{flex-direction:column;align-items:center;text-align:center}}
+.kontakt .knopf{justify-content:center;width:100%;padding:14px 16px;font-size:16px}
+.kontakt details{font-size:13px;color:var(--tinte-2)}
+.kontakt summary{cursor:pointer;font-weight:600}
+textarea{width:100%;min-height:170px;margin-top:8px;font:12.5px/1.45 var(--f-zahl);border:1px solid var(--linie);border-radius:10px;padding:10px;background:var(--feld);color:var(--tinte);resize:vertical}
+.absender{text-align:center}
+
+/* Toast */
+.toast{position:fixed;right:max(16px,env(safe-area-inset-right,0px));top:calc(16px + env(safe-area-inset-top,0px));z-index:50;background:var(--gut);color:#fff;border-radius:12px;padding:12px 16px;display:flex;gap:10px;align-items:center;box-shadow:0 10px 28px rgba(16,48,47,.25);transform:translateY(-160%);opacity:0;max-width:calc(100% - 32px)}
+.toast.zeigen{transform:none;opacity:1}
+.toast svg{width:22px;height:22px;flex:none}
+.toast p{font-size:12.5px;opacity:.9}
+@media (prefers-reduced-motion:no-preference){.toast{transition:all .3s ease}}
+
+/* Bearbeiten-Modus (nur für Bearbeiter des Artefakts sichtbar) */
+.bearb-start{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:45;display:inline-flex;align-items:center;gap:8px;font:700 14px var(--f-text);background:var(--gold);color:var(--tinte);border:1px solid #d9a400;border-radius:999px;padding:10px 16px;cursor:pointer;box-shadow:0 6px 18px rgba(16,48,47,.2)}
+.bearb-start svg{width:16px;height:16px}
+.werkzeug{position:fixed;left:0;right:0;bottom:0;z-index:46;background:var(--tinte);color:#fff;padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-wrap:wrap;gap:6px;align-items:center;box-shadow:0 -6px 20px rgba(16,48,47,.25)}
+.werkzeug .gruppe{display:flex;gap:4px;flex-wrap:wrap}
+.werkzeug .trenner{width:1px;align-self:stretch;background:rgba(255,255,255,.2);margin:0 4px}
+.werkzeug button{font:700 14px var(--f-text);background:rgba(255,255,255,.12);color:#fff;border:0;border-radius:8px;padding:8px 11px;cursor:pointer;min-width:38px}
+.werkzeug button:hover{background:rgba(255,255,255,.22)}
+.werkzeug button.speichern{background:var(--gold);color:var(--tinte)}
+.werkzeug button.speichern:hover{background:#ffcb2e}
+.werkzeug .status{font-size:13px;color:#cdeeea;margin-left:auto}
+body.bearbeiten{padding-bottom:120px}
+body.bearbeiten [data-t]{outline:1.5px dashed rgba(15,107,103,.55);outline-offset:2px;cursor:text;border-radius:3px}
+body.bearbeiten [data-t]:hover{background:rgba(242,183,5,.12)}
+body.bearbeiten [data-t]:focus{outline:2px solid var(--gold);background:rgba(242,183,5,.16)}
+.box,.teil{position:relative}
+.box-steuer{display:none}
+body.bearbeiten .box-steuer{display:flex;gap:4px;position:absolute;top:-14px;right:12px;z-index:6}
+.box-steuer button{font:700 12px var(--f-text);background:var(--tinte);color:#fff;border:0;border-radius:6px;padding:4px 8px;cursor:pointer;box-shadow:0 2px 6px rgba(16,48,47,.25)}
+.teil>.box-steuer button{background:var(--petrol);padding:2px 7px;font-size:11px}
+body.bearbeiten .teil>.box-steuer{top:-20px;right:0}
+body.bearbeiten .box{outline:2px dashed var(--gold-rand);outline-offset:4px}
+body.bearbeiten .teil{outline:1px dashed #b5ddd9;outline-offset:3px}
+body.bearbeiten .leiste a.knopf{pointer-events:auto}
+
+/* Fuß */
+footer{margin-top:44px;border-top:1px solid var(--linie);background:var(--karte);padding-block:24px}
+.rechtliches{background:var(--feld);border:1px solid var(--linie);border-radius:12px;padding:16px;display:grid;gap:8px;font-size:13px;color:var(--tinte-2)}
+.rechtliches b{color:var(--tinte)}
+.fusszeile{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;font-size:12.5px;color:var(--tinte-2);margin-top:14px}
+.uhr.fakten b{font-size:clamp(17px,2.6vw,28px)}
+.uhr.fakten i{text-transform:none;letter-spacing:0;font-size:12px}
+@media (max-width:520px){.uhr.fakten{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-chip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></symbol>
+  <symbol id="i-hilfe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/></symbol>
+  <symbol id="i-ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-orden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.5 13.2 17 22l-5-3-5 3 1.5-8.8"/></symbol>
+  <symbol id="i-funken" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2z"/></symbol>
+  <symbol id="i-stift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol>
+  <symbol id="i-kopie" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+</svg>
+
+<div class="toast" id="toast" role="status"><svg><use href="#i-ok"/></svg><div><b>Angaben kopiert!</b><p>Füge sie jetzt in deine Nachricht an mich ein.</p></div></div>
+
+<button class="bearb-start" id="bearbStart" type="button" hidden><svg><use href="#i-stift"/></svg>Seite bearbeiten</button>
+<div class="werkzeug" id="werkzeug" role="toolbar" aria-label="Bearbeiten" hidden>
+  <div class="gruppe">
+    <button type="button" data-cmd="bold" title="Fett"><b>F</b></button>
+    <button type="button" data-cmd="italic" title="Kursiv"><i>K</i></button>
+    <button type="button" data-cmd="underline" title="Unterstrichen"><u>U</u></button>
+  </div>
+  <span class="trenner"></span>
+  <div class="gruppe">
+    <button type="button" data-einzug="-1" title="Ausrücken">⇤ Ausrücken</button>
+    <button type="button" data-einzug="1" title="Einrücken">Einrücken ⇥</button>
+  </div>
+  <span class="trenner"></span>
+  <div class="gruppe">
+    <button type="button" data-ausr="left" title="Linksbündig">Links</button>
+    <button type="button" data-ausr="center" title="Zentriert">Mitte</button>
+    <button type="button" data-ausr="right" title="Rechtsbündig">Rechts</button>
+    <button type="button" data-ausr="justify" title="Blocksatz">Block</button>
+  </div>
+  <span class="trenner"></span>
+  <div class="gruppe">
+    <button type="button" class="speichern" id="bSpeichern">Speichern</button>
+    <button type="button" id="bAbbrechen">Abbrechen</button>
+  </div>
+  <span class="status" id="bStatus">Text anklicken zum Ändern · Pfeile an den Boxen zum Verschieben</span>
+</div>
+
+<header class="leiste">
+  <div class="innen">
+    <div class="marke">
+      <div class="marke-icon"><svg width="26" height="26"><use href="#i-chip"/></svg></div>
+      <div><div class="kicker" data-t="kicker">Für KMU in Thüringen</div><h1 data-t="marke">KI-Fördermittelrechner</h1></div>
+    </div>
+    <a class="knopf" href="#kontakt"><svg width="18" height="18"><use href="#i-hilfe"/></svg><span data-t="knopfHilfe">Kostenlose Antragstellung</span></a>
+  </div>
+</header>
+
+<main class="innen">
+  <section class="banner" lang="de">
+    <div class="banner-text">
+      <span class="eilig"><svg><use href="#i-warn"/></svg><span data-t="eilig">Laufend beantragbar · Programm bis Ende 2029</span></span>
+      <h2 class="titel" id="titel"><span id="tHaupt" data-t="titelHaupt">Dein Kosten- und Zeitersparnis mit KI-Tools.</span> <span class="programm" id="tProg" data-t="titelProg">Förderprogramm <em>„InnoInvest“ der Thüringer Aufbaubank</em></span></h2>
+      <p class="text" data-t="bannerText">Nutze die Fördermöglichkeit des Landes Thüringen für deine Umstellung auf KI-Tools. InnoInvest fördert Investitionen, die für deinen Betrieb eine <b>Innovation</b> sind, mit einem <b>festen Zuschuss je nach Projektgröße</b>. Der Antrag ist <u>laufend möglich</u> und muss <b>vor Projektbeginn</b> gestellt werden.</p>
+    </div>
+    <div class="frist" aria-live="off">
+      <small data-t="fristOben">InnoInvest auf einen Blick</small>
+      <div class="uhr fakten">
+        <div><b>5.000 €</b><i>Mindestinvestition</i></div><div><b>200.000 €</b><i>höchster Zuschuss</i></div>
+        <div><b>24</b><i>Monate Umsetzung</i></div><div><b>2029</b><i>Programm läuft bis</i></div>
+      </div>
+      <span data-t="fristUnten">Laufend beantragbar über das Thüringer Förderportal · Antrag vor Projektbeginn</span>
+    </div>
+  </section>
+
+    <div class="spalte" id="spalte">
+      <section class="karte box" data-box="betrieb">
+        <div class="k-kopf"><div class="k-titel"><span class="nr">1</span><div><h3 data-t="s1Titel">Dein Betrieb</h3><p data-t="s1Unter">Eckdaten zu Branche, Standort und Personalkosten</p></div></div></div>
+        <div class="felder">
+          <label for="branche"><span data-t="lBranche">Branche</span><select id="branche"></select></label>
+          <label for="kreis"><span data-t="lKreis">Standort</span><select id="kreis"></select></label>
+        </div>
+        <div class="meldungen" id="pruefung"></div>
+        <div class="felder">
+          <label for="ma"><span data-t="lMa">Mitarbeitende (Anzahl)</span><input id="ma" type="number" min="1" max="999" placeholder="z. B. 8" inputmode="numeric"></label>
+          <div class="lbl"><div class="lbl-zeile"><label for="satz"><span data-t="lSatz">Kosten / Std. (€ mit Nebenkosten)</span></label><b id="satzWert">35 €</b></div>
+            <input id="satz" type="range" min="20" max="100" step="1" value="35"></div>
+        </div>
+      </section>
+
+      <section class="karte box" data-box="zeit">
+        <div class="k-kopf">
+          <div class="k-titel"><span class="nr">2</span><div><h3 data-t="s2Titel">Wo geht die Zeit hin?</h3><p data-t="s2Unter">Welche Aufgaben ein KI-Tool übernehmen kann</p></div></div>
+          <div class="gesamt"><small data-t="gesamtLabel">Gesamt gespart:</small><b id="gesamt">–</b></div>
+        </div>
+        <div class="aufgaben" id="aufgaben"></div>
+        <div class="legende"><span class="g" data-t="legWeg">Gelb: Zeit, die das KI-Tool übernimmt und somit freie Zeit für dich bedeutet</span></div>
+        <p class="klein" data-t="s2Hinweis">Die Ersparnis ist ein vorsichtiger Schätzwert und wird im Gespräch für deinen Betrieb geprüft.</p>
+      </section>
+
+      <section class="karte box" data-box="projekt" id="karteProjekt">
+        <div class="k-kopf"><div class="k-titel"><span class="nr">3</span><div><h3 data-t="s3Titel">Dein Projekt &amp; Förderung</h3><p data-t="s3Unter">Kosten kalkulieren und Zuschuss berechnen</p></div></div></div>
+
+        <div class="eckdaten teil" data-teil="eckdaten">
+          <div class="eck gold"><b data-t="eck1Wert">fester Betrag</b><span data-t="eck1">Zuschuss je Stufe, meist 20–25 %</span></div>
+          <div class="eck"><b data-t="eck2Wert">5.000 €</b><span data-t="eck2">Mindestinvestition</span></div>
+          <div class="eck"><b data-t="eck3Wert">200.000 €</b><span data-t="eck3">Maximalzuschuss</span></div>
+        </div>
+
+        <div class="lbl teil" data-teil="kosten">
+          <div class="kostenzeile"><label for="kosten"><span data-t="lKosten">Projektkosten (netto)</span></label><b id="kostenWert">–</b></div>
+          <input id="kosten" type="range" min="6000" max="300000" step="1000" value="24000">
+          <p class="klein" data-t="kostenHinweis">Vorschlag basiert auf deinen gewählten Aufgaben. Beliebig anpassbar ab 5.000 €. Maßgeblich für die Stufe ist später das wirtschaftlichste Vergleichsangebot.</p>
+        </div>
+
+        <div class="teil" data-teil="aufstellung" style="display:grid;gap:12px">
+          <div class="aufstellung" aria-label="Ausgaben- und Finanzierungsplan">
+            <div><span data-t="aKosten">Projektkosten (externer Dienstleister):</span><span id="pKosten">–</span></div>
+            <div class="zuschuss"><span data-t="aZuschuss">Zuschuss InnoInvest (feste Stufe):</span><span id="pZuschuss">–</span></div>
+            <div class="summe"><span data-t="aEigen">Dein Eigenanteil:</span><span id="pEigen">–</span></div>
+          </div>
+          <div class="teilung" aria-label="Aufteilung der Projektkosten"><div class="land" id="tLand"></div><div class="du" id="tDu"></div></div>
+          <div class="meldungen" id="planHinweis"></div>
+        </div>
+
+        <div class="ergebnis teil" data-teil="ergebnis" aria-live="polite">
+          <h4><svg width="16" height="16"><use href="#i-funken"/></svg><span data-t="ergTitel">Dein Ergebnis im Überblick</span></h4>
+          <div class="echt"><small data-t="echtTitel">Echte Kostenersparnis durch KI-Tools</small><b id="eEcht">–</b><span data-t="echtHinweis">pro Jahr, mit oder ohne Förderung</span></div>
+          <div class="kacheln">
+            <div class="kachel"><small data-t="k1">Zeit gespart / Woche</small><b id="eStd">–</b></div>
+            <div class="kachel"><small data-t="k2">Ersparnis in 3 Jahren</small><b id="eJahr">–</b></div>
+            <div class="kachel gold"><small data-t="k3">Landeszuschuss</small><b id="eZuschuss">–</b></div>
+            <div class="kachel"><small data-t="k4">Eigenanteil bezahlt nach</small><b id="eAmort">–</b></div>
+          </div>
+        </div>
+
+        <div class="verlauf teil" data-teil="verlauf">
+          <h4><span data-t="verlaufTitel">Entwicklung deines Kontos</span> <span id="kurveJahre">über 3 Jahre</span></h4>
+          <div class="kurven-legende"><span data-t="kurveMit">mit Förderung</span><span class="ohne" data-t="kurveOhne">ohne Förderung</span></div>
+          <div class="kurve-box"><svg id="kurve" viewBox="0 0 400 210" role="img" aria-label="Verlauf mit und ohne Förderung"></svg></div>
+          <p class="satz" id="kurveSatz"></p>
+        </div>
+
+        <div class="vorteile teil" data-teil="vorteile">
+          <h4 data-t="vorteileTitel">Was du davon hast:</h4>
+          <ul id="vorteile"></ul>
+        </div>
+
+        <div class="kontakt teil" data-teil="kontakt" id="kontakt">
+          <div class="antragshilfe" lang="de">
+            <p class="ah-titel" data-t="ahTitel">Kostenlose Antragstellung: Ich erledige alles für dich.</p>
+            <p class="ah-text" data-t="ahText">Von der Beschreibung deines Vorhabens bis zum fertig ausgefüllten Antrag übernehme ich alle Formalitäten für dich. Du prüfst nur noch und schickst den fertigen Antrag ab.</p>
+          </div>
+          <button class="knopf" id="kopieren" type="button"><svg width="18" height="18"><use href="#i-kopie"/></svg><span id="kopierText" data-t="kopierText">Angaben kopieren &amp; kostenlose Antragstellung anfragen</span></button>
+          <p class="klein absender" data-t="kontaktHinweis">Kopiere deine Berechnung mit einem Klick und füge sie in deine Anfrage ein.</p>
+          <div class="senden" id="senden" hidden>
+            <p class="senden-titel">Deine Angaben sind kopiert. Wie möchtest du sie mir schicken?</p>
+            <div class="senden-knoepfe">
+              <a class="knopf" id="perMail" href="mailto:rietz.info@gmail.com">E-Mail senden</a>
+              <a class="knopf wa" id="perWa" href="https://wa.me/4915167661204" target="_blank" rel="noopener">WhatsApp senden</a>
+            </div>
+            <p class="klein">Öffnet sich nichts? Dann schreib mir direkt und füge die kopierten Angaben ein:</p>
+            <div class="kopierzeile"><span>E-Mail: <b>rietz.info@gmail.com</b></span><button type="button" data-kopie="rietz.info@gmail.com">Kopieren</button></div>
+            <div class="kopierzeile"><span>WhatsApp / Telefon: <b>01516 7661204</b></span><button type="button" data-kopie="015167661204">Kopieren</button></div>
+          </div>
+          <details><summary>Text ansehen</summary><textarea id="text" readonly aria-label="Deine Angaben zum Kopieren"></textarea></details>
+          <p class="klein absender" data-t="absender">Marco Rietz · Apps &amp; KI-Werkzeuge für Betriebe · rietz.info@gmail.com · 01516 7661204</p>
+        </div>
+      </section>
+    </div>
+</main>
+
+<footer>
+  <div class="innen">
+    <div class="rechtliches">
+      <p data-t="fWichtig"><b>Wichtig:</b> Alle Zahlen sind eine Beispielrechnung und keine Förderzusage. Über die Förderung entscheidet allein die Thüringer Aufbaubank. Gefördert werden Investitionen, die für den Betrieb eine Innovation sind, zum Beispiel ein neuer oder deutlich verbesserter Arbeitsablauf. Mit dem Projekt darf frühestens einen Tag nach Antragseingang begonnen werden, vor der Bewilligung auf eigenes Risiko. Gefördert wird nur gekaufte Software, die der Betrieb als Anlagegut verbucht; Abo- und Laufzeitlizenzen sowie Schulungen werden nicht gefördert. Für die Stufe sind Vergleichsangebote nötig. Der Zuschuss wird erst nach dem Verwendungsnachweis ausgezahlt, die Kosten müssen also vollständig vorfinanziert werden. Es gelten 5 Jahre Zweckbindung, die EU-Hinweispflichten (Plakat, Website) und die De-minimis-Grenze.</p>
+      <p data-t="fGrundlage"><b>Grundlage:</b> <a href="https://www.aufbaubank.de/Foerderprogramme/InnoInvest" target="_blank" rel="noopener">Programmseite InnoInvest der Thüringer Aufbaubank</a>, <a href="https://dokumente.aufbaubank.de/11307-InnoInvest-Richtlinie.pdf" target="_blank" rel="noopener">Richtlinie</a> (in Kraft seit 01.09.2025) und <a href="https://dokumente.aufbaubank.de/11306-InnoInvest-Foerdergrundsaetze.pdf" target="_blank" rel="noopener">Fördergrundsätze</a> (Stand 27.07.2026), geprüft am 29.10.2026. Kundenbetreuung der Thüringer Aufbaubank: 0800 55 65156.</p>
+      <p data-t="fDatenschutz"><b>Datenschutz:</b> Dieser Check speichert nichts und versendet nichts von selbst. Deine Angaben bleiben in deinem Browser, bis du sie selbst per E-Mail oder WhatsApp schickst.</p>
+    </div>
+    <div class="infos">
+      <details>
+        <summary>Über mich</summary>
+        <div class="ich">
+          <img src="data:image/jpeg;base64,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" alt="Marco Rietz" width="96" height="96">
+          <div>
+            <p>Ich bin Marco Rietz und lebe in Sachsen-Anhalt. Ich baue Apps und KI-Werkzeuge, die auf die Abläufe eines Betriebs zugeschnitten sind, damit Routinearbeit weniger Zeit kostet.</p>
+            <p>Damit die Umstellung für dich bezahlbar wird, übernehme ich die Antragstellung für die Förderung kostenlos, von der Projektskizze bis zum fertig ausgefüllten Antrag.</p>
+            <p>Ein Projekt von Nova|LI.</p>
+          </div>
+        </div>
+      </details>
+      <details>
+        <summary>Quellen</summary>
+        <h4>Förderprogramm</h4>
+        <p><a href="https://www.aufbaubank.de/Foerderprogramme/InnoInvest" target="_blank" rel="noopener">Thüringer Aufbaubank: InnoInvest</a> (laufend beantragbar, ab 5.000 € Investition, bis 200.000 € Zuschuss)</p>
+        <p><a href="https://dokumente.aufbaubank.de/11307-InnoInvest-Richtlinie.pdf" target="_blank" rel="noopener">InnoInvest-Richtlinie</a>: Nr. 2 Fördergegenstand und 5 Jahre Zweckbindung, Nr. 4 Vorhabenbeginn und Investitionssumme 5.000 € bis 1 Mio. €, Nr. 5 Zuschuss-Stufen: bis 10.000 € → 2.500 €, bis 20.000 € → 5.000 €, bis 50.000 € → 10.000 €, bis 100.000 € → 20.000 €, bis 200.000 € → 40.000 €, bis 300.000 € → 60.000 € (weitere Stufen bis 200.000 €), De-minimis</p>
+        <p><a href="https://dokumente.aufbaubank.de/11306-InnoInvest-Foerdergrundsaetze.pdf" target="_blank" rel="noopener">InnoInvest-Fördergrundsätze (Stand 27.07.2026)</a>: Teil B Innovationsbegriff, Teil C 24 Monate Umsetzung und Vergleichsangebote, Teil D Ausschluss von Laufzeitlizenzen und Schulungen, Teil E ausgeschlossene Branchen</p>
+        <p><a href="https://www.aufbaubank.de/Foerderprogramme/Digitalbonus-Thueringen" target="_blank" rel="noopener">Digitalbonus Thüringen</a>: Mittel ausgeschöpft, keine Neuauflage geplant</p>
+        <h4>Zeitersparnis durch KI-Tools</h4>
+        <p>Die Ersparnis je Aufgabe ist ein vorsichtiger Schätzwert. Neutrale Studien mit Prozentwerten gibt es kaum, die meisten veröffentlichten Zahlen stammen von Software-Anbietern und liegen höher. Orientierung gaben unter anderem: <a href="https://lebensmittelpraxis.de/sortiment/48550-obst-und-gemuese-zeitfresser-disposition-wie-ki-den-bestellprozess-verkuerzt-und-abschriften-um-30-prozent-senkt.html" target="_blank" rel="noopener">Lebensmittelpraxis (Bestellung im Markt)</a>, <a href="https://www.computerwoche.de/article/4194413/ki-im-kundenservice-auf-den-hype-folgt-die-bewaehrungsprobe.html" target="_blank" rel="noopener">Computerwoche / Roland Berger (Kundenservice)</a>, <a href="https://caritas.de/neue-caritas/heftarchiv/jahrgang-2024/artikel/leichter-planen-mit-ki" target="_blank" rel="noopener">Caritas (Planung in der Pflege)</a>, <a href="https://www.medi-karriere.de/magazin/ki-in-der-pflegedokumentation/" target="_blank" rel="noopener">Medi-Karriere (Pflegedokumentation)</a>, <a href="https://www.tageskarte.io/gastronomie/detail/restaurant-reservierung-die-meisten-gaeste-greifen-immer-noch-zum-telefon.html" target="_blank" rel="noopener">Tageskarte (Reservierungen)</a>, <a href="https://www.landwirtschaft.sachsen.de/download/DiDaMM_Abschlussworkshop_Praesentation_Maschinenmanagement_Aufwand_und_Nutzen.pdf" target="_blank" rel="noopener">Sächsisches Landesamt für Landwirtschaft (Dokumentation)</a>, <a href="https://www.ki-syndikat.de/" target="_blank" rel="noopener">KI-Syndikat (Praxisbeispiele)</a>. Die tatsächliche Ersparnis wird im Gespräch für deinen Betrieb geprüft.</p>
+      </details>
+      <details>
+        <summary>Impressum &amp; Datenschutz</summary>
+        <h4>Angaben gemäß § 5 DDG</h4>
+        <p>Nova|LI · Marco Rietz<br>Hardenbergstraße 31<br>06456 Arnstein OT Wiederstedt<br>Deutschland</p>
+        <p>Telefon: 01516 7661204<br>E-Mail: rietz.info@gmail.com</p>
+        <h4>Datenschutz</h4>
+        <p>Dieser Förder-Check speichert nichts und versendet nichts von selbst. Deine Eingaben werden nur in deinem Browser berechnet und nicht an einen Server übertragen. Der Förder-Check selbst setzt keine Cookies, nutzt kein Tracking und zeigt keine Werbung.</p>
+        <p>Erst wenn du selbst auf „E-Mail senden“ oder „WhatsApp senden“ tippst und die Nachricht abschickst, erhalte ich deine Angaben. Ich nutze sie ausschließlich, um deine Anfrage zu beantworten und den Förderantrag vorzubereiten (Art. 6 Abs. 1 Buchst. b DSGVO). Beim Versand per WhatsApp gelten zusätzlich die Datenschutzbestimmungen von WhatsApp (Meta).</p>
+        <p>Die Seite wird über GitHub Pages (GitHub Inc., USA) ausgeliefert. Beim Aufruf verarbeitet GitHub technisch notwendig deine IP-Adresse, um die Seite zu übertragen und vor Missbrauch zu schützen (Art. 6 Abs. 1 Buchst. f DSGVO). Schriften und alle Programmteile sind in der Seite selbst enthalten, es wird keine Verbindung zu Google oder anderen Drittanbietern aufgebaut.</p>
+        <p>Verantwortlich für die Datenverarbeitung ist Marco Rietz (Anschrift siehe oben). Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung und Widerspruch sowie das Recht, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren, zum Beispiel beim Landesbeauftragten für den Datenschutz Sachsen-Anhalt.</p>
+        <h4>Lizenzen</h4>
+        <p>Schriften: Bricolage Grotesque, Copyright 2022 The Bricolage Grotesque Project Authors; Source Sans 3, Copyright 2010-2020 Adobe; IBM Plex Mono, Copyright 2017 IBM Corp. Alle drei stehen unter der SIL Open Font License, Version 1.1 (<a href="https://openfontlicense.org" target="_blank" rel="noopener">openfontlicense.org</a>), die Lizenztexte liegen als OFL-Dateien neben der Seite.</p>
+        <h4>Haftungsausschluss</h4>
+        <p>Alle Zahlen sind eine Beispielrechnung und keine Förderzusage. Über die Förderung entscheidet allein die Thüringer Aufbaubank. Angaben zum Förderprogramm ohne Gewähr, maßgeblich ist die jeweils gültige Richtlinie.</p>
+      </details>
+    </div>
+    <div class="fusszeile"><span data-t="fussLinks">Marco Rietz · Apps &amp; KI-Werkzeuge für Betriebe</span><span data-t="fussRechts">© 2026 Förder-Check Thüringen</span></div>
+  </div>
+</footer>
+
+<script>
+const AUFGABEN = {
+  lieferschein:{n:"Wareneingang und Lieferscheine abgleichen",p:.6,w:"Lieferschein fotografieren, das Werkzeug gleicht mit der Bestellung ab und markiert Abweichungen."},
+  werbung:{n:"Werbung, Handzettel, Social-Media-Beiträge",p:.55,w:"Angebote eintragen, Handzettel und Beiträge entstehen automatisch im eigenen Design."},
+  bestellung:{n:"Bestellungen und Lager",p:.4,w:"Bestellvorschläge aus Verkaufszahlen, Warnung bei knappen Beständen."},
+  dienstplan:{n:"Dienstplan und Urlaubsplanung",p:.5,w:"Plan entsteht aus Wünschen, Stunden und Regeln, Änderungen per Handy."},
+  anfragen:{n:"Kundenanfragen und E-Mails beantworten",p:.4,w:"KI sortiert Anfragen und schreibt Antwortentwürfe, du gibst nur noch frei."},
+  angebote:{n:"Angebote schreiben",p:.5,w:"Aus Notizen oder Fotos wird ein fertiges Angebot mit deinen Preisen."},
+  rechnungen:{n:"Rechnungen und Mahnungen",p:.45,w:"Rechnung direkt aus dem Auftrag, Zahlungserinnerung automatisch."},
+  einsatz:{n:"Termin- und Einsatzplanung",p:.45,w:"Termine, Fahrten und Mitarbeitende werden automatisch zusammengeplant."},
+  doku:{n:"Dokumentation und Berichte",p:.3,w:"Sprachnotiz oder Foto vor Ort, der Bericht schreibt sich selbst."},
+  reservierung:{n:"Reservierungen und Bestellungen am Telefon",p:.3,w:"Online-Annahme rund um die Uhr, Übersicht für das Team."},
+  kasse:{n:"Kassenabrechnung und Tagesabschluss",p:.3,w:"Zahlen werden zusammengeführt und geprüft, Abweichungen fallen sofort auf."},
+  auftrag:{n:"Auftrags- und Produktionsplanung",p:.4,w:"Aufträge, Maschinen und Material in einem Plan, der sich selbst aktualisiert."},
+  qualitaet:{n:"Qualitätsprüfung dokumentieren",p:.5,w:"Prüfprotokolle per Tablet, Fotos und Messwerte landen automatisch im Bericht."},
+  touren:{n:"Touren- und Routenplanung",p:.4,w:"Touren entstehen automatisch aus Aufträgen, Adressen und Zeitfenstern, Änderungen gehen direkt aufs Fahrerhandy."},
+  termine:{n:"Terminvergabe am Telefon",p:.4,w:"Kunden buchen online rund um die Uhr, eine Erinnerung vorab senkt die Zahl der Ausfälle."},
+  agrardoku:{n:"Pflichtdokumentation (Düngung, Pflanzenschutz, Tierhaltung)",p:.35,w:"Einträge per Handy oder Sprache direkt vor Ort, Nachweise für Kontrollen entstehen automatisch."}
+};
+const BRANCHEN = {
+  "Einzelhandel / Lebensmittelmarkt":{lieferschein:6,werbung:5,bestellung:4,dienstplan:3,anfragen:2},
+  "Handwerk":{angebote:6,rechnungen:4,einsatz:4,doku:5,anfragen:3,bestellung:2},
+  "Gastronomie / Hotel":{dienstplan:4,bestellung:4,reservierung:5,werbung:3,kasse:3},
+  "Dienstleistung / Büro":{anfragen:8,angebote:4,rechnungen:3,einsatz:3,doku:4},
+  "Produktion / Industrie":{auftrag:6,qualitaet:5,bestellung:4,angebote:4,lieferschein:3},
+  "Pflege / Gesundheit":{doku:8,dienstplan:5,einsatz:4,anfragen:3,rechnungen:2},
+  "Landwirtschaft":{agrardoku:6,bestellung:3,dienstplan:3,rechnungen:3,anfragen:2},
+  "Logistik / Transport":{touren:8,lieferschein:4,rechnungen:4,anfragen:4,dienstplan:3},
+  "Kfz-Werkstatt":{angebote:5,einsatz:4,bestellung:4,rechnungen:3,anfragen:3,doku:2},
+  "Friseur / Kosmetik":{termine:6,werbung:3,kasse:2,dienstplan:2,bestellung:2}
+};
+const KREISE = [["Altenburger Land",0],["Eichsfeld",0],["Erfurt",0],["Gera",0],["Gotha",0],["Greiz",0],["Hildburghausen",0],["Ilm-Kreis",0],["Jena",0],["Kyffhäuserkreis",0],["Nordhausen",0],["Saale-Holzland-Kreis",0],["Saale-Orla-Kreis",0],["Saalfeld-Rudolstadt",0],["Schmalkalden-Meiningen",0],["Sömmerda",0],["Sonneberg",0],["Suhl",0],["Unstrut-Hainich-Kreis",0],["Wartburgkreis",0],["Weimar",0],["Weimarer Land",0],["außerhalb Thüringens",-1]];
+// Zuschuss-Stufen laut InnoInvest-Richtlinie Nr. 5: [förderfähige Kosten bis, Zuschuss]
+const STUFEN = [[10000,2500],[20000,5000],[50000,10000],[100000,20000],[200000,40000],[300000,60000],[450000,90000],[600000,120000],[800000,160000],[1000000,200000]];
+// Ausgeschlossene Branchen laut Fördergrundsätzen Teil E
+const AUSSCHLUSS = {"Pflege / Gesundheit":"Betriebe im medizinischen und sozialen Bereich (z. B. Pflege, Arztpraxen, Apotheken) sind von InnoInvest ausgeschlossen.","Landwirtschaft":"Betriebe der Land- und Forstwirtschaft sind von InnoInvest ausgeschlossen."};
+// Größere Städte mit ihrem Landkreis (kreisfreie Städte sind ihr eigener Kreis)
+const STAEDTE = [["Erfurt","Erfurt"],["Jena","Jena"],["Gera","Gera"],["Weimar","Weimar"],["Suhl","Suhl"],["Gotha","Gotha"],["Nordhausen","Nordhausen"],
+  ["Eisenach","Wartburgkreis"],["Mühlhausen/Thüringen","Unstrut-Hainich-Kreis"],["Altenburg","Altenburger Land"],["Ilmenau","Ilm-Kreis"],
+  ["Saalfeld/Saale","Saalfeld-Rudolstadt"],["Arnstadt","Ilm-Kreis"],["Rudolstadt","Saalfeld-Rudolstadt"],["Sonneberg","Sonneberg"],
+  ["Sömmerda","Sömmerda"],["Bad Salzungen","Wartburgkreis"],["Greiz","Greiz"],["Meiningen","Schmalkalden-Meiningen"],["Apolda","Weimarer Land"],
+  ["Sondershausen","Kyffhäuserkreis"],["Bad Langensalza","Unstrut-Hainich-Kreis"],["Leinefelde-Worbis","Eichsfeld"],
+  ["Heilbad Heiligenstadt","Eichsfeld"],["Schmalkalden","Schmalkalden-Meiningen"],["Hildburghausen","Hildburghausen"],
+  ["Zeulenroda-Triebes","Greiz"],["Pößneck","Saale-Orla-Kreis"],["Schleiz","Saale-Orla-Kreis"],["Bad Frankenhausen","Kyffhäuserkreis"],
+  ["Eisenberg","Saale-Holzland-Kreis"],["Stadtroda","Saale-Holzland-Kreis"]];
+const kreisVon = wert => wert.startsWith("Stadt: ") ? STAEDTE.find(s => "Stadt: " + s[0] === wert)?.[1] : wert;
+const revier = wert => (KREISE.find(k => k[0] === kreisVon(wert)) || [, -1])[1];
+const WOCHEN = 46, FRIST = new Date("2026-11-16T13:00:00+01:00");
+
+const $ = id => document.getElementById(id);
+const euro = v => Math.round(v).toLocaleString("de-DE") + " €";
+const std = v => v.toLocaleString("de-DE",{maximumFractionDigits:1}) + " Std.";
+const icon = (n, cls = "") => `<svg class="${cls}"><use href="#i-${n}"/></svg>`;
+let zustand = {}; let kostenAngefasst = false;
+
+$("branche").innerHTML = Object.keys(BRANCHEN).sort((a, b) => a.localeCompare(b, "de")).map(b => `<option>${b}</option>`).join("");$("kreis").innerHTML =
+  `<optgroup label="Städte">` + [...STAEDTE].sort((a, b) => a[0].localeCompare(b[0], "de"))
+    .map(([s, k]) => `<option value="Stadt: ${s}">${s}${s === k ? "" : " · Landkreis " + k}</option>`).join("") + `</optgroup>` +
+  `<optgroup label="Landkreise und kreisfreie Städte">` + KREISE.filter(k => k[1] >= 0).map(([k]) => `<option>${k}</option>`).join("") + `</optgroup>` +
+  `<option>außerhalb Thüringens</option>`;
+$("kreis").value = "Nordhausen";
+
+function brancheLaden(){
+  const vorgabe = BRANCHEN[$("branche").value];
+  zustand = {};
+  Object.keys(AUFGABEN).forEach(id => zustand[id] = {an: id in vorgabe, h: vorgabe[id] ?? 2});
+  const reihe = [...Object.keys(vorgabe), ...Object.keys(AUFGABEN).filter(id => !(id in vorgabe))];
+  $("aufgaben").innerHTML = reihe.map(id => {
+    const a = AUFGABEN[id];
+    return `<div class="aufgabe" id="k_${id}">
+      <div class="a-kopf">
+        <div class="a-links"><input type="checkbox" id="c_${id}"><div><label for="c_${id}">${a.n}</label>
+          <p class="a-wie">${a.w}</p>${a.ref ? `<span class="a-ref">${a.ref}</span>` : ""}</div></div>
+        <div class="a-rechts"><b id="s_${id}"></b><span id="v_${id}"></span></div>
+      </div>
+      <div class="a-regler" id="g_${id}">
+        <div class="a-werte"><span>Die Zeit, die du jetzt damit verbringst: <b id="w_${id}"></b> pro Woche</span><span class="g">Freie Zeit für dich: ca. <b id="e_${id}"></b></span></div>
+        <input type="range" id="r_${id}" min="0" max="20" step="0.5" aria-label="Stunden pro Woche: ${a.n}">
+        <div class="balken"><b id="bb_${id}"></b><span id="bt_${id}"></span></div>
+      </div></div>`;
+  }).join("");
+  reihe.forEach(id => {
+    $("c_"+id).checked = zustand[id].an; $("r_"+id).value = zustand[id].h;
+    $("c_"+id).addEventListener("change", e => { zustand[id].an = e.target.checked; rechnen(); });
+    $("r_"+id).addEventListener("input", e => { zustand[id].h = +e.target.value; rechnen(); });
+  });
+  kostenAngefasst = false; rechnen();
+}
+
+function rechnen(){
+  const satz = +$("satz").value, ma = +$("ma").value || 0;
+  $("satzWert").textContent = satz + " €";
+  let vorher = 0, gespart = 0, anzahl = 0;
+  for (const [id, z] of Object.entries(zustand)) {
+    const s = z.h * AUFGABEN[id].p, rest = z.h - s;
+    $("k_"+id).classList.toggle("an", z.an); $("k_"+id).classList.toggle("aus", !z.an);
+    $("g_"+id).hidden = !z.an;
+    $("s_"+id).textContent = `${std(z.h)}/Woche`;
+    $("v_"+id).textContent = z.an ? `→ ${std(s)} frei` : "";
+    $("w_"+id).textContent = std(z.h); $("e_"+id).textContent = std(s);
+    // Balken zeigt nur die Zeit, die das KI-Tool übernimmt (volle Länge = 12 Std. pro Woche)
+    $("bb_"+id).style.width = Math.min(s / 12, 1) * 60 + "%";
+    $("bt_"+id).textContent = `KI übernimmt ${std(s)} pro Woche`;
+    if (z.an) { vorher += z.h; gespart += s; anzahl++; }
+  }
+  const jahr = gespart * WOCHEN * satz, monat = jahr / 12;
+  $("gesamt").textContent = `${std(gespart)}/Woche`;
+
+  // Kostenvorschlag: je Aufgabe ca. 6.000 €, solange niemand am Regler gezogen hat
+  if (!kostenAngefasst) $("kosten").value = Math.min(200000, Math.max(6000, anzahl * 6000));
+  const kosten = +$("kosten").value;
+  const kreis = revier($("kreis").value);
+  const stufe = STUFEN.find(([bis]) => kosten <= bis) || [0, 0];
+  let zuschuss = stufe[1];
+  const ausgeschlossen = AUSSCHLUSS[$("branche").value];
+  const foerderbar = kreis >= 0 && ma < 250 && kosten >= 5000 && !ausgeschlossen;
+  if (!foerderbar) zuschuss = 0;
+  const eigen = kosten - zuschuss;
+
+  $("kostenWert").textContent = euro(kosten);
+  $("pKosten").textContent = euro(kosten); $("pZuschuss").textContent = "− " + euro(zuschuss); $("pEigen").textContent = euro(eigen);
+  const anteil = kosten ? Math.round(zuschuss / kosten * 100) : 0;
+  $("tLand").style.flex = anteil; $("tDu").style.flex = 100 - anteil;
+  $("tLand").textContent = anteil ? `Land ${anteil} % · ${euro(zuschuss)}` : "";
+  $("tDu").textContent = `Du ${100 - anteil} % · ${euro(eigen)}`;
+  $("eStd").textContent = std(gespart); $("eJahr").textContent = euro(jahr * 3); $("eEcht").textContent = euro(jahr); $("eZuschuss").textContent = euro(zuschuss);
+  const mon = monat > 0 ? Math.ceil(eigen / monat) : Infinity;
+  $("eAmort").textContent = isFinite(mon) ? mon + (mon === 1 ? " Monat" : " Monaten") : "–";
+
+  // Prüfung Antragsberechtigung
+  const m = [];
+  if (kreis < 0) m.push(`<div class="meldung schlecht">${icon("warn")}<span>InnoInvest fördert nur Investitionen in Thüringen. Für andere Bundesländer gibt es eigene Programme, frag nach.</span></div>`);
+  else m.push(`<div class="meldung gut">${icon("ok")}<span>Standort in Thüringen: antragsberechtigt.</span></div>`);
+  if (ausgeschlossen) m.push(`<div class="meldung schlecht">${icon("warn")}<span>${ausgeschlossen}</span></div>`);
+  if ($("branche").value.startsWith("Einzelhandel")) m.push(`<div class="meldung warn">${icon("warn")}<span>Großflächiger Einzelhandel mit mehr als 800 m² Verkaufsfläche ist von InnoInvest ausgeschlossen.</span></div>`);
+  if (ma >= 250) m.push(`<div class="meldung schlecht">${icon("warn")}<span>Ab 250 Mitarbeitenden gilt ein Betrieb nicht mehr als KMU und kann nicht gefördert werden. Außerdem gelten Grenzen für Umsatz und Bilanzsumme.</span></div>`);
+  $("pruefung").innerHTML = m.join("");
+  $("planHinweis").innerHTML =
+    (foerderbar ? `<div class="meldung blau">${icon("ok")}<span>Deine Stufe: förderfähige Kosten bis ${euro(stufe[0])} → fester Zuschuss ${euro(zuschuss)}.</span></div>` : "");
+
+  kurve(kosten, eigen, monat);
+  vorteile(gespart, zuschuss, eigen, mon, foerderbar);
+  anfrageText({satz, ma, vorher, gespart, jahr, kosten, zuschuss, eigen, mon});
+}
+
+function kurve(kosten, eigen, monat){
+  const W = 400, H = 210, L = 50, R = 24, T = 14, B = 28;
+  const ohne = m => -kosten + monat * m, mit = m => -eigen + monat * m;
+  // Zeitraum: mindestens 3 Jahre, länger, bis auch ohne Förderung alles bezahlt ist (höchstens 5 Jahre)
+  const beOhne = monat > 0 ? kosten / monat : Infinity, beMit = monat > 0 ? eigen / monat : Infinity;
+  const M = isFinite(beOhne) ? Math.min(60, Math.max(36, Math.ceil(beOhne / 12) * 12 + 12)) : 36;
+  const jahre = M / 12;
+  $("kurveJahre").textContent = `über ${jahre} Jahre`;
+  const monate = n => `${Math.ceil(n)} ${Math.ceil(n) === 1 ? "Monat" : "Monaten"}`;
+  const lo = Math.min(-kosten, 0), hi = Math.max(mit(M), 1000);
+  const x = m => L + m / M * (W - L - R), y = v => T + (hi - v) / (hi - lo) * (H - T - B);
+  const pfad = f => Array.from({length: M + 1}, (_, m) => `${m ? "L" : "M"}${x(m).toFixed(1)},${y(f(m)).toFixed(1)}`).join(" ");
+  const kurz = v => (Math.abs(v) >= 1000 ? Math.round(v / 1000) + " Tsd." : Math.round(v)) + " €";
+  let s = "";
+  Array.from({length: jahre + 1}, (_, j) => j * 12).forEach(m => s += `<line x1="${x(m)}" x2="${x(m)}" y1="${T}" y2="${H-B}" stroke="#d6e0de"/><text x="${x(m)}" y="${H-9}" text-anchor="middle" font-size="11" fill="#4a615f">${m ? m/12 + ". Jahr" : "Start"}</text>`);
+  s += `<line x1="${L}" x2="${W-R}" y1="${y(0)}" y2="${y(0)}" stroke="#10302f" stroke-width="1"/>`;
+  [lo, hi].forEach(v => s += `<text x="${L-6}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="#4a615f">${kurz(v)}</text>`);
+  s += `<text x="${L-6}" y="${y(0)+4}" text-anchor="end" font-size="11" fill="#10302f">0 €</text>`;
+  s += `<path d="${pfad(ohne)}" fill="none" stroke="#9aaba9" stroke-width="2.5" stroke-dasharray="6 5"/>`;
+  s += `<path d="${pfad(mit)} L${x(M)},${y(lo)} L${x(0)},${y(lo)} Z" fill="#d9efed" opacity=".6"/>`;
+  s += `<path d="${pfad(mit)}" fill="none" stroke="#0f6b67" stroke-width="3"/>`;
+  const be = monat > 0 ? eigen / monat : Infinity;
+  if (be <= M) s += `<circle cx="${x(be)}" cy="${y(0)}" r="6" fill="#f2b705" stroke="#10302f" stroke-width="1.5"><title>Eigenanteil bezahlt nach ${Math.ceil(be)} Monaten</title></circle>`;
+  Array.from({length: jahre}, (_, j) => (j + 1) * 12).forEach(m => {
+    s += `<circle cx="${x(m)}" cy="${y(ohne(m))}" r="4" fill="#9aaba9"><title>${m/12}. Jahr ohne Förderung: ${euro(ohne(m))}</title></circle>`;
+    s += `<circle cx="${x(m)}" cy="${y(mit(m))}" r="5" fill="#0f6b67"><title>${m/12}. Jahr mit Förderung: ${euro(mit(m))}</title></circle>`;
+  });
+  $("kurve").innerHTML = s;
+  requestAnimationFrame(sparZeileEinpassen);
+  const plus = mit(M), vz = v => (v >= 0 ? "+" : "") + euro(v);
+  if (!(monat > 0)) { $("kurveSatz").innerHTML = `Wähle Aufgaben aus, damit die Ersparnis berechnet werden kann.`; return; }
+  const amort = `<span class="amort">Deine Ausgaben sind amortisiert: mit Förderung nach etwa <b>${monate(beMit)}</b>, ohne Förderung nach etwa <b>${monate(beOhne)}</b>.</span>`;
+  $("kurveSatz").innerHTML =
+    `Nach ${jahre} Jahren liegst du mit Förderung bei <b class="zahl">${vz(plus)}</b>, ohne Förderung bei <b class="zahl">${vz(ohne(M))}</b>.` +
+    (plus > 0
+      ? `<span class="spar">Du sparst also mit dem Einsatz von KI-Tools ca. ${euro(plus)} an Kosten.</span>`
+      : `<span class="spar">Deine Ausgaben sind nach etwa ${monate(beMit)} amortisiert.</span>`) +
+    amort +
+    (ohne(M) > 0 ? `<span class="auch">Auch ohne Förderung bleibt dir eine echte Kostenersparnis von <b class="zahl">${euro(ohne(M))}</b>.</span>` : "");
+}
+
+// Spar-Satz in eine Zeile einpassen (höchstens 28 px, am Handy unter 14 px lieber umbrechen)
+// Misst die Textbreite an einer unsichtbaren Kopie außerhalb der Seite.
+// So ändert sich beim Messen nichts an der sichtbaren Seite und der Bildschirm springt nicht.
+function textBreite(el, px){
+  const cs = getComputedStyle(el), m = document.createElement("span");
+  m.style.cssText = `position:absolute;left:-9999px;top:0;visibility:hidden;white-space:nowrap;` +
+    `font-family:${cs.fontFamily};font-weight:${cs.fontWeight};letter-spacing:${cs.letterSpacing};font-size:${px}px`;
+  m.innerHTML = el.innerHTML;
+  document.body.append(m);
+  const b = m.getBoundingClientRect().width;
+  m.remove();
+  return b || 1;
+}
+function zeileEinpassen(el, max, min, ersatz){
+  if (!el) return;
+  const verfuegbar = el.parentElement.clientWidth - parseFloat(getComputedStyle(el.parentElement).paddingLeft) * 2;
+  let groesse = max;
+  for (let i = 0; i < 3; i++) groesse = Math.min(max, groesse * verfuegbar / textBreite(el, groesse) * 0.98);
+  el.classList.remove("umbruch");
+  if (groesse < min) { el.classList.add("umbruch"); el.style.fontSize = ersatz + "px"; }
+  else el.style.fontSize = groesse + "px";
+}
+function sparZeileEinpassen(){
+  zeileEinpassen(document.querySelector("#kurveSatz .spar"), 28, 14, 18);
+  zeileEinpassen(document.querySelector("#kurveSatz .auch"), 19, 12, 15);
+}
+
+function vorteile(gespart, zuschuss, eigen, mon, foerderbar){
+  const tage = Math.round(gespart * WOCHEN / 8);
+  const li = [
+    `Rund <b>${tage} Arbeitstage</b> im Jahr frei für Kunden, Verkauf oder Feierabend.`,
+    foerderbar ? `Das Land übernimmt <b>${euro(zuschuss)}</b> als nicht rückzahlbaren Zuschuss, wenn die Förderbedingungen eingehalten werden.` : `Ohne Förderberechtigung trägst du die Kosten allein. Ich prüfe gern andere Programme.`,
+    isFinite(mon) ? `Dein Eigenanteil von <b>${euro(eigen)}</b> ist nach etwa <b>${mon} ${mon === 1 ? "Monat" : "Monaten"}</b> wieder drin.` : `Wähle Aufgaben aus, damit die Ersparnis berechnet werden kann.`,
+    `Maßgeschneidertes Werkzeug für deine Abläufe, kein starres Abo.`
+  ];
+  $("vorteile").innerHTML = li.map(t => `<li>${icon("ok")}<span>${t}</span></li>`).join("");
+}
+
+function anfrageText(d){
+  const auf = Object.entries(zustand).filter(([, z]) => z.an)
+    .map(([id, z]) => `- ${AUFGABEN[id].n}: ${std(z.h)}/Woche (Ersparnis ca. ${std(z.h * AUFGABEN[id].p)})`).join("\n");
+  $("text").value =
+`--- FÖRDER-CHECK THÜRINGEN INNOINVEST ---
+Branche: ${$("branche").value}
+Standort: ${$("kreis").selectedOptions[0]?.textContent || $("kreis").value}
+Mitarbeitende: ${d.ma || "nicht angegeben"} | Kosten je Arbeitsstunde: ${d.satz} €
+
+Ausgewählte Aufgaben:
+${auf || "- keine ausgewählt"}
+
+Zeit heute: ${std(d.vorher)}/Woche, geschätzt gespart: ${std(d.gespart)}/Woche
+Ersparnis geschätzt: ca. ${euro(d.jahr)}/Jahr
+
+Projektkosten (netto): ${euro(d.kosten)}
+Zuschuss (InnoInvest-Stufe): ${euro(d.zuschuss)}
+Eigenanteil: ${euro(d.eigen)}${isFinite(d.mon) ? `\nEigenanteil wieder drin nach: ca. ${d.mon} Monaten` : ""}
+
+Bitte melde dich wegen der kostenlosen Vorbereitung meines InnoInvest-Antrags.
+Name / Betrieb:
+Telefon oder E-Mail:`;
+}
+
+function countdown(){
+  const ms = FRIST - new Date();
+  if (ms <= 0) { $("countdown").innerHTML = `<div style="grid-column:1/-1"><b style="font-size:20px">Fenster ist offen</b><i>jetzt einreichen · max. 90 Anträge</i></div>`; return false; }
+  const zwei = n => String(n).padStart(2, "0");
+  $("uT").textContent = zwei(Math.floor(ms / 864e5));
+  $("uS").textContent = zwei(Math.floor(ms % 864e5 / 36e5));
+  $("uM").textContent = zwei(Math.floor(ms % 36e5 / 6e4));
+  $("uSek").textContent = zwei(Math.floor(ms % 6e4 / 1e3));
+  return true;
+}
+
+$("branche").addEventListener("change", brancheLaden);
+["kreis", "ma", "satz"].forEach(id => $(id).addEventListener("input", rechnen));
+$("kosten").addEventListener("input", () => { kostenAngefasst = true; rechnen(); });
+$("kopieren").addEventListener("click", () => {
+  const t = $("text"), b = $("kopierText"), alt = b.textContent;
+  const markieren = () => { t.closest("details").open = true; t.select(); b.textContent = "Text markiert, jetzt Strg+C"; setTimeout(() => b.textContent = alt, 4000); };
+  const fertig = () => { $("toast").classList.add("zeigen"); setTimeout(() => $("toast").classList.remove("zeigen"), 3500); };
+  if (navigator.clipboard) navigator.clipboard.writeText(t.value).then(fertig, markieren); else markieren();
+  // Versandwege anbieten: E-Mail und WhatsApp mit fertig eingetragener Nachricht
+  const betreff = "Anfrage Förder-Check Thüringen: kostenlose Antragstellung";
+  $("perMail").href = `mailto:rietz.info@gmail.com?subject=${encodeURIComponent(betreff)}&body=${encodeURIComponent(t.value)}`;
+  $("perWa").href = `https://wa.me/4915167661204?text=${encodeURIComponent(t.value)}`;
+  $("senden").hidden = false;
+  $("senden").scrollIntoView({block: "nearest", behavior: "smooth"});
+});
+document.querySelectorAll("[data-kopie]").forEach(b => b.addEventListener("click", () => {
+  const alt = b.textContent;
+  const ok = () => { b.textContent = "Kopiert"; setTimeout(() => b.textContent = alt, 2000); };
+  navigator.clipboard ? navigator.clipboard.writeText(b.dataset.kopie).then(ok, () => b.textContent = b.dataset.kopie) : (b.textContent = b.dataset.kopie);
+}));
+// Überschrift: Hauptsatz und Programmname in einer Zeile, Programmname so groß, dass die Zeile bündig mit Text und Counter endet
+function titelEinpassen(){
+  const h = $("titel"), haupt = $("tHaupt"), prog = $("tProg");
+  const breite = h.parentElement.clientWidth;
+  // Zwei Zeilen: Hauptsatz oben, Programmname darunter, jede Zeile auf die volle Breite eingepasst
+  h.classList.add("umbruch");
+  // mehrmals nachmessen: die Schrift ändert ihre Form mit der Größe, die Breite wächst nicht genau mit
+  const passend = el => { let g = 100; for (let i = 0; i < 4; i++) g = g * breite / textBreite(el, g) * 0.995; return g; };
+  const gh = passend(haupt), gp = passend(prog);
+  h.style.fontSize = haupt.style.fontSize = gh + "px";
+  prog.style.fontSize = gp + "px";
+}
+titelEinpassen();
+document.fonts && document.fonts.ready.then(() => { titelEinpassen(); sparZeileEinpassen(); });
+// Am Handy feuert „resize“ auch, wenn beim Scrollen die Adressleiste ein- und ausfährt.
+// Neu einpassen nur, wenn sich wirklich die Breite ändert, sonst springt die Seite.
+let letzteBreite = innerWidth;
+addEventListener("resize", () => {
+  if (innerWidth === letzteBreite) return;
+  letzteBreite = innerWidth;
+  titelEinpassen(); sparZeileEinpassen();
+});
+
+// ---------- Bearbeiten: Texte, Einzug, Ausrichtung und Reihenfolge der Boxen liegen in inhalt.json ----------
+const STANDARD_TEILE = ["eckdaten", "kosten", "aufstellung", "ergebnis", "verlauf", "vorteile", "kontakt"];
+let gespeichert = {};
+const textEl = k => document.querySelector(`[data-t="${k}"]`);
+const boxEl = k => document.querySelector(`[data-box="${k}"]`);
+const teilEl = k => document.querySelector(`[data-teil="${k}"]`);
+
+// Nur einfache Auszeichnung zulassen (fett, kursiv, unterstrichen, Zeilenumbruch)
+function saeubern(html){
+  const t = document.createElement("template"); t.innerHTML = html;
+  const erlaubt = new Set(["B","STRONG","I","EM","U","BR","A"]);
+  [...t.content.querySelectorAll("*")].reverse().forEach(el => {
+    if (!erlaubt.has(el.tagName)) {
+      if (el.tagName === "DIV" || el.tagName === "P") el.before(document.createElement("br"));
+      el.replaceWith(...el.childNodes);
+      return;
+    }
+    const href = el.tagName === "A" ? el.getAttribute("href") || "" : "";
+    [...el.attributes].forEach(a => el.removeAttribute(a.name));
+    // Links nur auf https-Seiten behalten
+    if (el.tagName === "A") {
+      if (/^https:\/\//.test(href)) { el.href = href; el.target = "_blank"; el.rel = "noopener"; }
+      else el.replaceWith(...el.childNodes);
+    }
+  });
+  return t.innerHTML.replace(/^(<br>)+/, "");
+}
+
+function anwenden(z){
+  for (const el of document.querySelectorAll("[data-t]")) {
+    const k = el.dataset.t;
+    if (!("standard" in el.dataset)) el.dataset.standard = el.innerHTML;
+    el.innerHTML = z.texte && k in z.texte ? saeubern(z.texte[k]) : el.dataset.standard;
+    const e = z.einzug?.[k] || 0;
+    el.dataset.einzug = e; el.style.paddingLeft = e ? e * 1.5 + "em" : "";
+    el.style.textAlign = z.ausrichtung?.[k] || "";
+  }
+  (z.boxen || ["betrieb", "zeit", "projekt"]).forEach(k => boxEl(k) && $("spalte").append(boxEl(k)));
+  (z.teile || STANDARD_TEILE).forEach(k => teilEl(k) && $("karteProjekt").append(teilEl(k)));
+  titelEinpassen();
+}
+
+function einsammeln(){
+  const z = {texte:{}, einzug:{}, ausrichtung:{}, boxen:[], teile:[]};
+  for (const el of document.querySelectorAll("[data-t]")) {
+    const k = el.dataset.t, html = saeubern(el.innerHTML);
+    if (html !== saeubern(el.dataset.standard)) z.texte[k] = html;
+    if (+el.dataset.einzug) z.einzug[k] = +el.dataset.einzug;
+    if (el.style.textAlign) z.ausrichtung[k] = el.style.textAlign;
+  }
+  $("spalte").querySelectorAll(":scope>.box").forEach(b => z.boxen.push(b.dataset.box));
+  $("karteProjekt").querySelectorAll(":scope>.teil").forEach(t => z.teile.push(t.dataset.teil));
+  return z;
+}
+
+function steuerung(el){
+  const s = document.createElement("div"); s.className = "box-steuer";
+  s.innerHTML = `<button type="button" data-r="hoch" title="Nach oben">▲</button><button type="button" data-r="runter" title="Nach unten">▼</button>`;
+  s.addEventListener("click", e => {
+    const r = e.target.closest("button")?.dataset.r; if (!r) return;
+    const gleich = n => n && n.classList.contains(el.classList.contains("box") ? "box" : "teil");
+    let n;
+    if (r === "hoch") { n = el.previousElementSibling; while (n && !gleich(n)) n = n.previousElementSibling; if (n) n.before(el); }
+    if (r === "runter") { n = el.nextElementSibling; while (n && !gleich(n)) n = n.nextElementSibling; if (n) n.after(el); }
+    el.scrollIntoView({block: "nearest", behavior: "smooth"});
+  });
+  el.prepend(s);
+}
+document.querySelectorAll(".box, .teil").forEach(steuerung);
+
+let letztesFeld = null;
+function bearbeiten(an){
+  document.body.classList.toggle("bearbeiten", an);
+  $("werkzeug").hidden = !an; $("bearbStart").hidden = an;
+  document.querySelectorAll("[data-t]").forEach(el => el.contentEditable = an ? "true" : "false");
+  if (!an) document.querySelectorAll("[data-t]").forEach(el => el.removeAttribute("contenteditable"));
+  titelEinpassen();
+}
+document.addEventListener("focusin", e => { if (e.target.closest?.("[data-t]")) letztesFeld = e.target.closest("[data-t]"); });
+document.addEventListener("click", e => { if (document.body.classList.contains("bearbeiten") && e.target.closest("a[href], label")) e.preventDefault(); }, true);
+document.addEventListener("input", e => { if (e.target.closest?.("#titel")) titelEinpassen(); });
+document.addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey && e.target.closest?.("[data-t]") && e.target.closest(".titel, h1, h3, h4, small, label, .eilig")) e.preventDefault(); });
+
+$("werkzeug").addEventListener("mousedown", e => { if (e.target.closest("[data-cmd],[data-einzug],[data-ausr]")) e.preventDefault(); });
+$("werkzeug").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.cmd) document.execCommand(b.dataset.cmd);
+  if (b.dataset.einzug && letztesFeld) {
+    const n = Math.max(0, Math.min(6, (+letztesFeld.dataset.einzug || 0) + +b.dataset.einzug));
+    letztesFeld.dataset.einzug = n; letztesFeld.style.paddingLeft = n ? n * 1.5 + "em" : "";
+  }
+  if (b.dataset.ausr && letztesFeld) letztesFeld.style.textAlign = b.dataset.ausr;
+  if (b.id === "bAbbrechen") { anwenden(gespeichert); bearbeiten(false); }
+  if (b.id === "bSpeichern") speichern();
+});
+
+let seite = null;
+async function speichern(){
+  const z = einsammeln(), s = $("bStatus");
+  s.textContent = "Speichere …";
+  try {
+    await seite.publish({"inhalt.json": JSON.stringify(z, null, 1)});
+    gespeichert = z; s.textContent = "Gespeichert. Alle sehen jetzt die neue Fassung.";
+    setTimeout(() => bearbeiten(false), 1200);
+  } catch (err) {
+    const code = err?.code;
+    s.textContent = code === "conflict" ? "Jemand anderes hat inzwischen gespeichert. Die Seite lädt die neue Fassung."
+      : code === "not_writer" || code === "not_granted" ? "Speichern geht nur mit Bearbeitungsrecht."
+      : code === "capability_disabled" ? "Speichern ist in dieser Ansicht nicht möglich, z. B. über einen öffentlichen Link."
+      : "Speichern hat nicht geklappt. Bitte noch einmal versuchen.";
+  }
+}
+$("bearbStart").addEventListener("click", () => bearbeiten(true));
+
+Promise.reject().then(r => r.ok ? r.json() : {}).catch(() => ({}))
+  .then(z => { gespeichert = z || {}; anwenden(gespeichert); });
+
+(async () => {
+  for (let i = 0; i < 50 && !window.claude?.use; i++) await new Promise(r => setTimeout(r, 100));
+  if (!window.claude?.use) return;
+  const [art, user] = await Promise.all([claude.use("artifact"), claude.use("user")]);
+  if (!art) return;
+  const darf = user ? await user.canEdit().catch(() => false) : false;
+  if (!darf) return;
+  seite = art; $("bearbStart").hidden = false;
+})();
+
+brancheLaden();
+</script>
+
+</body>
+</html>
