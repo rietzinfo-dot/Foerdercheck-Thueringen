@@ -158,6 +158,9 @@ select{text-overflow:ellipsis}
 .eck.gold{background:var(--gold-hell);border-color:var(--gold-rand)} .eck.gold b{color:var(--tinte)}
 .eck span{font-size:11.5px;color:var(--tinte-2);display:block;line-height:1.25;margin-top:2px}
 .kostenzeile{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.laufendzeile{flex-wrap:wrap;margin-top:6px}
+.laufendzeile label{flex:1 1 220px;font-size:14px}
+.laufendzeile input{width:120px;flex:none;text-align:right;font-family:var(--f-zahl)}
 .kostenzeile label{font-size:15px;color:var(--tinte)}
 .kostenzeile b{font-family:var(--f-zahl);font-size:20px;font-weight:500;color:var(--petrol)}
 .klein{font-size:12.5px;color:var(--tinte-2)}
@@ -379,8 +382,12 @@ footer{margin-top:44px;border-top:1px solid var(--linie);background:var(--karte)
 
         <div class="lbl teil" data-teil="kosten">
           <div class="kostenzeile"><label for="kosten"><span data-t="lKosten">Projektkosten (netto)</span></label><b id="kostenWert">–</b></div>
-          <input id="kosten" type="range" min="6000" max="300000" step="1000" value="24000">
+          <input id="kosten" type="range" min="5000" max="300000" step="1000" value="24000">
           <p class="klein" data-t="kostenHinweis">Vorschlag basiert auf deinen gewählten Aufgaben. Beliebig anpassbar ab 5.000 €. Maßgeblich für die Stufe ist später das wirtschaftlichste Vergleichsangebot.</p>
+          <div class="meldungen" id="kostenWarnung"></div>
+          <div class="kostenzeile laufendzeile"><label for="laufend"><span data-t="lLaufend">Laufende Kosten pro Monat in € (Betrieb, Wartung, KI-Nutzung)</span></label>
+            <input id="laufend" type="number" min="0" step="5" inputmode="numeric" aria-describedby="laufendHinweis"></div>
+          <p class="klein" id="laufendHinweis" data-t="laufendHinweis">Vorschlag: rund 15 % der Projektkosten pro Jahr, eine übliche Faustregel für Software-Wartung. Trag deinen Wert ein, wenn du ihn kennst. Die laufenden Kosten werden von der Ersparnis abgezogen.</p>
         </div>
 
         <div class="teil" data-teil="aufstellung" style="display:grid;gap:12px">
@@ -395,7 +402,7 @@ footer{margin-top:44px;border-top:1px solid var(--linie);background:var(--karte)
 
         <div class="ergebnis teil" data-teil="ergebnis" aria-live="polite">
           <h4><svg width="16" height="16"><use href="#i-funken"/></svg><span data-t="ergTitel">Dein Ergebnis im Überblick</span></h4>
-          <div class="echt"><small data-t="echtTitel">Echte Kostenersparnis durch KI-Tools</small><b id="eEcht">–</b><span data-t="echtHinweis">pro Jahr, mit oder ohne Förderung</span></div>
+          <div class="echt"><small data-t="echtTitel">Wert der gesparten Arbeitszeit</small><b id="eEcht">–</b><span data-t="echtHinweis">pro Jahr nach Abzug der laufenden Kosten, mit oder ohne Förderung</span></div>
           <div class="kacheln">
             <div class="kachel"><small data-t="k1">Zeit gespart / Woche</small><b id="eStd">–</b></div>
             <div class="kachel"><small data-t="k2">Ersparnis in 3 Jahren</small><b id="eJahr">–</b></div>
@@ -542,7 +549,7 @@ const $ = id => document.getElementById(id);
 const euro = v => Math.round(v).toLocaleString("de-DE") + " €";
 const std = v => v.toLocaleString("de-DE",{maximumFractionDigits:1}) + " Std.";
 const icon = (n, cls = "") => `<svg class="${cls}"><use href="#i-${n}"/></svg>`;
-let zustand = {}; let kostenAngefasst = false;
+let zustand = {}; let kostenAngefasst = false; let laufendAngefasst = false;
 
 $("branche").innerHTML = Object.keys(BRANCHEN).sort((a, b) => a.localeCompare(b, "de")).map(b => `<option>${b}</option>`).join("");$("kreis").innerHTML =
   `<optgroup label="Städte">` + [...STAEDTE].sort((a, b) => a[0].localeCompare(b[0], "de"))
@@ -594,12 +601,19 @@ function rechnen(){
     $("bt_"+id).textContent = `KI übernimmt ${std(s)} pro Woche`;
     if (z.an) { vorher += z.h; gespart += s; anzahl++; }
   }
-  const jahr = gespart * WOCHEN * satz, monat = jahr / 12;
+  const brutto = gespart * WOCHEN * satz;
   $("gesamt").textContent = `${std(gespart)}/Woche`;
 
   // Kostenvorschlag: je Aufgabe ca. 6.000 €, solange niemand am Regler gezogen hat
-  if (!kostenAngefasst) $("kosten").value = Math.min(200000, Math.max(6000, anzahl * 6000));
+  const vorschlag = Math.min(300000, Math.max(5000, anzahl * 6000));
+  if (!kostenAngefasst) $("kosten").value = vorschlag;
   const kosten = +$("kosten").value;
+  $("kostenWarnung").innerHTML = anzahl && kosten < anzahl * 6000 * 0.6
+    ? `<div class="meldung warn">${icon("warn")}<span>Für ${anzahl} Aufgaben ist dieser Betrag sehr knapp. Realistisch sind eher ab ${euro(anzahl * 6000)}.</span></div>` : "";
+  // Laufende Kosten: Faustregel rund 15 % der Projektkosten pro Jahr, solange niemand selbst einen Wert einträgt
+  if (!laufendAngefasst) $("laufend").value = Math.round(kosten * 0.15 / 12 / 5) * 5;
+  const laufend = Math.max(0, +$("laufend").value || 0);
+  const jahr = brutto - laufend * 12, monat = jahr / 12;
   const kreis = revier($("kreis").value);
   const stufe = STUFEN.find(([bis]) => kosten <= bis) || [0, 0];
   let zuschuss = stufe[1];
@@ -631,7 +645,7 @@ function rechnen(){
 
   kurve(kosten, eigen, monat);
   vorteile(gespart, zuschuss, eigen, mon, foerderbar);
-  anfrageText({satz, ma, vorher, gespart, jahr, kosten, zuschuss, eigen, mon});
+  anfrageText({satz, ma, vorher, gespart, jahr, kosten, zuschuss, eigen, mon, laufend});
 }
 
 function kurve(kosten, eigen, monat){
@@ -672,7 +686,7 @@ function kurve(kosten, eigen, monat){
       ? `<span class="spar">Du sparst also mit dem Einsatz von KI-Tools ca. ${euro(plus)} an Kosten.</span>`
       : `<span class="spar">Deine Ausgaben sind nach etwa ${monate(beMit)} amortisiert.</span>`) +
     amort +
-    (ohne(M) > 0 ? `<span class="auch">Auch ohne Förderung bleibt dir eine echte Kostenersparnis von <b class="zahl">${euro(ohne(M))}</b>.</span>` : "");
+    (ohne(M) > 0 ? `<span class="auch">Auch ohne Förderung bleibt dir ein Plus von <b class="zahl">${euro(ohne(M))}</b>.</span>` : "");
 }
 
 // Spar-Satz in eine Zeile einpassen (höchstens 28 px, am Handy unter 14 px lieber umbrechen)
@@ -726,7 +740,8 @@ Ausgewählte Aufgaben:
 ${auf || "- keine ausgewählt"}
 
 Zeit heute: ${std(d.vorher)}/Woche, geschätzt gespart: ${std(d.gespart)}/Woche
-Ersparnis geschätzt: ca. ${euro(d.jahr)}/Jahr
+Laufende Kosten (Schätzung): ${euro(d.laufend)}/Monat
+Wert der gesparten Zeit nach laufenden Kosten: ca. ${euro(d.jahr)}/Jahr
 
 Projektkosten (netto): ${euro(d.kosten)}
 Zuschuss (InnoInvest-Stufe): ${euro(d.zuschuss)}
@@ -751,6 +766,7 @@ function countdown(){
 $("branche").addEventListener("change", brancheLaden);
 ["kreis", "ma", "satz"].forEach(id => $(id).addEventListener("input", rechnen));
 $("kosten").addEventListener("input", () => { kostenAngefasst = true; rechnen(); });
+$("laufend").addEventListener("input", () => { laufendAngefasst = true; rechnen(); });
 $("kopieren").addEventListener("click", () => {
   const t = $("text"), b = $("kopierText"), alt = b.textContent;
   const markieren = () => { t.closest("details").open = true; t.select(); b.textContent = "Text markiert, jetzt Strg+C"; setTimeout(() => b.textContent = alt, 4000); };
